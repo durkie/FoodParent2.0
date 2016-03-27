@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom';
 import * as underscore from 'underscore';
 import * as Backbone from 'backbone';
 
-import Interfaces from './interfaces'
+import Interfaces from './interfaces';
 
 module App {
   export class AppComponent extends React.Component<Interfaces.IAppProps, {}> {
