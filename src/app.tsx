@@ -3,7 +3,14 @@ import * as ReactDOM from 'react-dom';
 import * as underscore from 'underscore';
 import * as Backbone from 'backbone';
 
-import Interfaces from './interfaces';
+import Interfaces from './shared/interfaces';
+import Utils from './shared/utils';
+import Home from './home/home.component';
+import Tree from './trees/trees.component';
+import Locale from './locale/locale';
+import Settings from './shared/settings';
+import RouterHandler from './shared/router.handler';
+import NavigationHandler from './shared/navigation.handler';
 
 module App {
   export class AppComponent extends React.Component<Interfaces.IAppProps, {}> {
@@ -49,40 +56,23 @@ module App {
     }
     render() {
       if (this.props.router.current == "home") {
-        return <FooComponent />;
-      }
-      if (this.props.router.current == "trees") {
-        return <BarComponent />;
+        return <Home.HomeComponent description={Locale.sApplicaitonDescription} image={Settings.uStaticImage + Settings.sApplicationLogoImage} />;
+      } else if (this.props.router.current == "trees") {
+        return <Tree.TreesComponent />;
       }
       return <div />;
     }
   }
-
-  export class Router extends Backbone.Router {
-    public current: string;
-    public arguments: Array<string>;
-    constructor(options?: Backbone.RouterOptions) {
-      super(options);
-      this.route("", "home");
-      this.route("trees/:id", "trees");
-    }
-    home() {
-      this.current = "home";
-        //EventHandler.handleNavigate(VIEW_STATUS.HOME);
-    }
-    trees(id: string) {
-      this.current = "trees";
-      this.arguments = new Array<string>();
-      this.arguments.push(id);
-        //EventHandler.handleNavigate(VIEW_STATUS.TREES, { id: id });
-    }
+  export function init() {
+    var Router: RouterHandler = new RouterHandler();
+    NavigationHandler.Router = Router;
+    ReactDOM.render((
+      <App.InterfaceComponent router={Router} />
+    ), document.querySelector('#fp-app'));
+    Backbone.history.start();
   }
 }
 
-let router = new App.Router();
-ReactDOM.render((
-  <App.InterfaceComponent router={router} />
-), document.querySelector('#fp-app'));
-Backbone.history.start();
+App.init();
 
 export default App;

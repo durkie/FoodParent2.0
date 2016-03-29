@@ -1,7 +1,7 @@
 module.exports = {
-  entry: "./tsDist/app.js",
+  entry: "./src/app.js",
   output: {
-    filename: "out.js",
+    filename: "foodparent.js",
     path: __dirname + "/dist",
   },
   resolve: {
@@ -20,6 +20,9 @@ module.exports = {
           presets: ['es2015', 'react']
         }
       },
+      { test: /\.css$/, loader: "style-loader!css-loader" }
+      //{ test: /\.png$/, loader: "url-loader?limit=100000" },
+      //{ test: /\.jpg$/, loader: "file-loader" }
     ],
   },
 }

@@ -42,32 +42,14 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/*!***********************!*\
-  !*** ./tsDist/app.js ***!
-  \***********************/
+/*!********************!*\
+  !*** ./src/app.js ***!
+  \********************/
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
+	"use strict";
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var React = _interopRequireWildcard(_react);
-	
-	var _reactDom = __webpack_require__(/*! react-dom */ 158);
-	
-	var ReactDOM = _interopRequireWildcard(_reactDom);
-	
-	var _backbone = __webpack_require__(/*! backbone */ 159);
-	
-	var Backbone = _interopRequireWildcard(_backbone);
-	
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -75,6 +57,15 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	var React = __webpack_require__(/*! react */ 1);
+	var ReactDOM = __webpack_require__(/*! react-dom */ 158);
+	var Backbone = __webpack_require__(/*! backbone */ 159);
+	var home_component_1 = __webpack_require__(/*! ./home/home.component */ 162);
+	var trees_component_1 = __webpack_require__(/*! ./trees/trees.component */ 170);
+	var locale_1 = __webpack_require__(/*! ./locale/locale */ 173);
+	var settings_1 = __webpack_require__(/*! ./shared/settings */ 174);
+	var router_handler_1 = __webpack_require__(/*! ./shared/router.handler */ 175);
+	var navigation_handler_1 = __webpack_require__(/*! ./shared/navigation.handler */ 167);
 	var App;
 	(function (App) {
 	    var AppComponent = function (_React$Component) {
@@ -179,10 +170,9 @@
 	            key: 'render',
 	            value: function render() {
 	                if (this.props.router.current == "home") {
-	                    return React.createElement(FooComponent, null);
-	                }
-	                if (this.props.router.current == "trees") {
-	                    return React.createElement(BarComponent, null);
+	                    return React.createElement(home_component_1.default.HomeComponent, { description: locale_1.default.sApplicaitonDescription, image: settings_1.default.uStaticImage + settings_1.default.sApplicationLogoImage });
+	                } else if (this.props.router.current == "trees") {
+	                    return React.createElement(trees_component_1.default.TreesComponent, null);
 	                }
 	                return React.createElement('div', null);
 	            }
@@ -192,44 +182,16 @@
 	    }(React.Component);
 	
 	    App.InterfaceComponent = InterfaceComponent;
-	
-	    var Router = function (_Backbone$Router) {
-	        _inherits(Router, _Backbone$Router);
-	
-	        function Router(options) {
-	            _classCallCheck(this, Router);
-	
-	            var _this5 = _possibleConstructorReturn(this, Object.getPrototypeOf(Router).call(this, options));
-	
-	            _this5.route("", "home");
-	            _this5.route("trees/:id", "trees");
-	            return _this5;
-	        }
-	
-	        _createClass(Router, [{
-	            key: 'home',
-	            value: function home() {
-	                this.current = "home";
-	                //EventHandler.handleNavigate(VIEW_STATUS.HOME);
-	            }
-	        }, {
-	            key: 'trees',
-	            value: function trees(id) {
-	                this.current = "trees";
-	                this.arguments = new Array();
-	                this.arguments.push(id);
-	                //EventHandler.handleNavigate(VIEW_STATUS.TREES, { id: id });
-	            }
-	        }]);
-	
-	        return Router;
-	    }(Backbone.Router);
-	
-	    App.Router = Router;
+	    function init() {
+	        var Router = new router_handler_1.default();
+	        navigation_handler_1.default.Router = Router;
+	        ReactDOM.render(React.createElement(App.InterfaceComponent, { router: Router }), document.querySelector('#fp-app'));
+	        Backbone.history.start();
+	    }
+	    App.init = init;
 	})(App || (App = {}));
-	var router = new App.Router();
-	ReactDOM.render(React.createElement(App.InterfaceComponent, { router: router }), document.querySelector('#fp-app'));
-	Backbone.history.start();
+	App.init();
+	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = App;
 	//# sourceMappingURL=app.js.map
 
@@ -33679,6 +33641,746 @@
 	}));
 
 
+/***/ },
+/* 162 */
+/*!************************************!*\
+  !*** ./src/home/home.component.js ***!
+  \************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var React = __webpack_require__(/*! react */ 1);
+	var styles = __webpack_require__(/*! ./home.component.css */ 163);
+	var navigation_handler_1 = __webpack_require__(/*! ./../shared/navigation.handler */ 167);
+	var enums_1 = __webpack_require__(/*! ./../shared/enums */ 169);
+	var Home;
+	(function (Home) {
+	    var HomeComponent = function (_React$Component) {
+	        _inherits(HomeComponent, _React$Component);
+	
+	        function HomeComponent(props) {
+	            _classCallCheck(this, HomeComponent);
+	
+	            var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(HomeComponent).call(this, props));
+	
+	            _this.state = {
+	                description: props.description,
+	                image: props.image
+	            };
+	            return _this;
+	        }
+	
+	        _createClass(HomeComponent, [{
+	            key: 'componentDidMount',
+	            value: function componentDidMount() {
+	                this.setState(this.state);
+	            }
+	        }, {
+	            key: 'onClick',
+	            value: function onClick() {
+	                navigation_handler_1.default.handle(enums_1.default.VIEW_LIST.TREES);
+	            }
+	        }, {
+	            key: 'render',
+	            value: function render() {
+	                var self = this;
+	                return React.createElement(
+	                    'div',
+	                    { className: styles.wrapper, onClick: self.onClick },
+	                    React.createElement(
+	                        'div',
+	                        { className: styles.logo },
+	                        React.createElement('img', { src: self.state.image }),
+	                        React.createElement(
+	                            'div',
+	                            { className: styles.title },
+	                            self.state.description
+	                        )
+	                    )
+	                );
+	            }
+	        }]);
+	
+	        return HomeComponent;
+	    }(React.Component);
+	
+	    Home.HomeComponent = HomeComponent;
+	})(Home || (Home = {}));
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = Home;
+	//# sourceMappingURL=home.component.js.map
+
+/***/ },
+/* 163 */
+/*!*************************************!*\
+  !*** ./src/home/home.component.css ***!
+  \*************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(/*! !./../../~/css-loader!./home.component.css */ 164);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(/*! ./../../~/style-loader/addStyles.js */ 166)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./home.component.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./home.component.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 164 */
+/*!****************************************************!*\
+  !*** ./~/css-loader!./src/home/home.component.css ***!
+  \****************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(/*! ./../../~/css-loader/lib/css-base.js */ 165)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "@media all {\r\n  ._3mzlav9kJmGgL1Zi8j5L_w {\r\n    position: absolute;\r\n    top: 0;\r\n    left: 0;\r\n    width: 100%;\r\n    height: 100%;\r\n    background-color: #5e4e51;\r\n    cursor: pointer;\r\n\r\n    display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */\r\n    display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */\r\n    display: -ms-flexbox;      /* TWEENER - IE 10 */\r\n    display: -webkit-flex;     /* NEW - Chrome */\r\n    display: flex;             /* NEW, Spec - Opera 12.1, Firefox 20+ */\r\n\r\n    -webkit-flex-direction: column; /* Safari 6.1+ */\r\n    flex-direction: column;\r\n\r\n    -webkit-justify-content: space-around;\r\n    justify-content: space-around;\r\n\r\n    -webkit-align-items: center;\r\n    align-items: center;\r\n  }\r\n  ._2t60ZzI3wcl0xNRSp0Nvwt {\r\n    position: relative;\r\n    width: 100%;\r\n    margin: auto;\r\n  }\r\n  img {\r\n    width: 100%;\r\n\r\n  }\r\n  ._283gbINyNtwvGQdaLnuzmj {\r\n    text-align: center;\r\n    font-size: x-large;\r\n    font-weight: 700;\r\n    color: #83a656;\r\n  }\r\n}\r\n\r\n@media only screen and (orientation: portrait) {\r\n  ._283gbINyNtwvGQdaLnuzmj {\r\n    margin: 5%;\r\n    letter-spacing: 1px;\r\n  }\r\n}\r\n\r\n@media only screen and (max-width: 420px) and (orientation: portrait) {\r\n  ._283gbINyNtwvGQdaLnuzmj {\r\n    font-size: large;\r\n  }\r\n}\r\n\r\n@media only screen and (orientation: landscape) {\r\n  ._283gbINyNtwvGQdaLnuzmj {\r\n    letter-spacing: 2px;\r\n    padding: 3% 0;\r\n  }\r\n  ._2t60ZzI3wcl0xNRSp0Nvwt {\r\n    margin: 0 10%;\r\n  }\r\n}\r\n\r\n@media only screen and (max-width: 736px) and (orientation: landscape) {\r\n  ._283gbINyNtwvGQdaLnuzmj {\r\n    font-size: x-large;\r\n  }\r\n}\r\n\r\n@media only screen and (min-width: 737px) and (max-width: 1280px) and (orientation: landscape) {\r\n  ._283gbINyNtwvGQdaLnuzmj {\r\n    font-size: xx-large;\r\n  }\r\n}\r\n\r\n@media only screen and (min-width: 1281px) and (max-width: 1920px) and (orientation: landscape) {\r\n  ._283gbINyNtwvGQdaLnuzmj {\r\n    font-size: xx-large;\r\n  }\r\n}\r\n", ""]);
+	
+	// exports
+	exports.locals = {
+		"wrapper": "_3mzlav9kJmGgL1Zi8j5L_w",
+		"logo": "_2t60ZzI3wcl0xNRSp0Nvwt",
+		"title": "_283gbINyNtwvGQdaLnuzmj"
+	};
+
+/***/ },
+/* 165 */
+/*!**************************************!*\
+  !*** ./~/css-loader/lib/css-base.js ***!
+  \**************************************/
+/***/ function(module, exports) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	// css base code, injected by the css-loader
+	module.exports = function() {
+		var list = [];
+	
+		// return the list of modules as css string
+		list.toString = function toString() {
+			var result = [];
+			for(var i = 0; i < this.length; i++) {
+				var item = this[i];
+				if(item[2]) {
+					result.push("@media " + item[2] + "{" + item[1] + "}");
+				} else {
+					result.push(item[1]);
+				}
+			}
+			return result.join("");
+		};
+	
+		// import a list of modules into the list
+		list.i = function(modules, mediaQuery) {
+			if(typeof modules === "string")
+				modules = [[null, modules, ""]];
+			var alreadyImportedModules = {};
+			for(var i = 0; i < this.length; i++) {
+				var id = this[i][0];
+				if(typeof id === "number")
+					alreadyImportedModules[id] = true;
+			}
+			for(i = 0; i < modules.length; i++) {
+				var item = modules[i];
+				// skip already imported module
+				// this implementation is not 100% perfect for weird media query combinations
+				//  when a module is imported multiple times with different media queries.
+				//  I hope this will never occur (Hey this way we have smaller bundles)
+				if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+					if(mediaQuery && !item[2]) {
+						item[2] = mediaQuery;
+					} else if(mediaQuery) {
+						item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+					}
+					list.push(item);
+				}
+			}
+		};
+		return list;
+	};
+
+
+/***/ },
+/* 166 */
+/*!*************************************!*\
+  !*** ./~/style-loader/addStyles.js ***!
+  \*************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	var stylesInDom = {},
+		memoize = function(fn) {
+			var memo;
+			return function () {
+				if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+				return memo;
+			};
+		},
+		isOldIE = memoize(function() {
+			return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
+		}),
+		getHeadElement = memoize(function () {
+			return document.head || document.getElementsByTagName("head")[0];
+		}),
+		singletonElement = null,
+		singletonCounter = 0,
+		styleElementsInsertedAtTop = [];
+	
+	module.exports = function(list, options) {
+		if(true) {
+			if(typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+		}
+	
+		options = options || {};
+		// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+		// tags it will allow on a page
+		if (typeof options.singleton === "undefined") options.singleton = isOldIE();
+	
+		// By default, add <style> tags to the bottom of <head>.
+		if (typeof options.insertAt === "undefined") options.insertAt = "bottom";
+	
+		var styles = listToStyles(list);
+		addStylesToDom(styles, options);
+	
+		return function update(newList) {
+			var mayRemove = [];
+			for(var i = 0; i < styles.length; i++) {
+				var item = styles[i];
+				var domStyle = stylesInDom[item.id];
+				domStyle.refs--;
+				mayRemove.push(domStyle);
+			}
+			if(newList) {
+				var newStyles = listToStyles(newList);
+				addStylesToDom(newStyles, options);
+			}
+			for(var i = 0; i < mayRemove.length; i++) {
+				var domStyle = mayRemove[i];
+				if(domStyle.refs === 0) {
+					for(var j = 0; j < domStyle.parts.length; j++)
+						domStyle.parts[j]();
+					delete stylesInDom[domStyle.id];
+				}
+			}
+		};
+	}
+	
+	function addStylesToDom(styles, options) {
+		for(var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+			if(domStyle) {
+				domStyle.refs++;
+				for(var j = 0; j < domStyle.parts.length; j++) {
+					domStyle.parts[j](item.parts[j]);
+				}
+				for(; j < item.parts.length; j++) {
+					domStyle.parts.push(addStyle(item.parts[j], options));
+				}
+			} else {
+				var parts = [];
+				for(var j = 0; j < item.parts.length; j++) {
+					parts.push(addStyle(item.parts[j], options));
+				}
+				stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+			}
+		}
+	}
+	
+	function listToStyles(list) {
+		var styles = [];
+		var newStyles = {};
+		for(var i = 0; i < list.length; i++) {
+			var item = list[i];
+			var id = item[0];
+			var css = item[1];
+			var media = item[2];
+			var sourceMap = item[3];
+			var part = {css: css, media: media, sourceMap: sourceMap};
+			if(!newStyles[id])
+				styles.push(newStyles[id] = {id: id, parts: [part]});
+			else
+				newStyles[id].parts.push(part);
+		}
+		return styles;
+	}
+	
+	function insertStyleElement(options, styleElement) {
+		var head = getHeadElement();
+		var lastStyleElementInsertedAtTop = styleElementsInsertedAtTop[styleElementsInsertedAtTop.length - 1];
+		if (options.insertAt === "top") {
+			if(!lastStyleElementInsertedAtTop) {
+				head.insertBefore(styleElement, head.firstChild);
+			} else if(lastStyleElementInsertedAtTop.nextSibling) {
+				head.insertBefore(styleElement, lastStyleElementInsertedAtTop.nextSibling);
+			} else {
+				head.appendChild(styleElement);
+			}
+			styleElementsInsertedAtTop.push(styleElement);
+		} else if (options.insertAt === "bottom") {
+			head.appendChild(styleElement);
+		} else {
+			throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
+		}
+	}
+	
+	function removeStyleElement(styleElement) {
+		styleElement.parentNode.removeChild(styleElement);
+		var idx = styleElementsInsertedAtTop.indexOf(styleElement);
+		if(idx >= 0) {
+			styleElementsInsertedAtTop.splice(idx, 1);
+		}
+	}
+	
+	function createStyleElement(options) {
+		var styleElement = document.createElement("style");
+		styleElement.type = "text/css";
+		insertStyleElement(options, styleElement);
+		return styleElement;
+	}
+	
+	function createLinkElement(options) {
+		var linkElement = document.createElement("link");
+		linkElement.rel = "stylesheet";
+		insertStyleElement(options, linkElement);
+		return linkElement;
+	}
+	
+	function addStyle(obj, options) {
+		var styleElement, update, remove;
+	
+		if (options.singleton) {
+			var styleIndex = singletonCounter++;
+			styleElement = singletonElement || (singletonElement = createStyleElement(options));
+			update = applyToSingletonTag.bind(null, styleElement, styleIndex, false);
+			remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true);
+		} else if(obj.sourceMap &&
+			typeof URL === "function" &&
+			typeof URL.createObjectURL === "function" &&
+			typeof URL.revokeObjectURL === "function" &&
+			typeof Blob === "function" &&
+			typeof btoa === "function") {
+			styleElement = createLinkElement(options);
+			update = updateLink.bind(null, styleElement);
+			remove = function() {
+				removeStyleElement(styleElement);
+				if(styleElement.href)
+					URL.revokeObjectURL(styleElement.href);
+			};
+		} else {
+			styleElement = createStyleElement(options);
+			update = applyToTag.bind(null, styleElement);
+			remove = function() {
+				removeStyleElement(styleElement);
+			};
+		}
+	
+		update(obj);
+	
+		return function updateStyle(newObj) {
+			if(newObj) {
+				if(newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap)
+					return;
+				update(obj = newObj);
+			} else {
+				remove();
+			}
+		};
+	}
+	
+	var replaceText = (function () {
+		var textStore = [];
+	
+		return function (index, replacement) {
+			textStore[index] = replacement;
+			return textStore.filter(Boolean).join('\n');
+		};
+	})();
+	
+	function applyToSingletonTag(styleElement, index, remove, obj) {
+		var css = remove ? "" : obj.css;
+	
+		if (styleElement.styleSheet) {
+			styleElement.styleSheet.cssText = replaceText(index, css);
+		} else {
+			var cssNode = document.createTextNode(css);
+			var childNodes = styleElement.childNodes;
+			if (childNodes[index]) styleElement.removeChild(childNodes[index]);
+			if (childNodes.length) {
+				styleElement.insertBefore(cssNode, childNodes[index]);
+			} else {
+				styleElement.appendChild(cssNode);
+			}
+		}
+	}
+	
+	function applyToTag(styleElement, obj) {
+		var css = obj.css;
+		var media = obj.media;
+	
+		if(media) {
+			styleElement.setAttribute("media", media)
+		}
+	
+		if(styleElement.styleSheet) {
+			styleElement.styleSheet.cssText = css;
+		} else {
+			while(styleElement.firstChild) {
+				styleElement.removeChild(styleElement.firstChild);
+			}
+			styleElement.appendChild(document.createTextNode(css));
+		}
+	}
+	
+	function updateLink(linkElement, obj) {
+		var css = obj.css;
+		var sourceMap = obj.sourceMap;
+	
+		if(sourceMap) {
+			// http://stackoverflow.com/a/26603875
+			css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+		}
+	
+		var blob = new Blob([css], { type: "text/css" });
+	
+		var oldSrc = linkElement.href;
+	
+		linkElement.href = URL.createObjectURL(blob);
+	
+		if(oldSrc)
+			URL.revokeObjectURL(oldSrc);
+	}
+
+
+/***/ },
+/* 167 */
+/*!******************************************!*\
+  !*** ./src/shared/navigation.handler.js ***!
+  \******************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var network_handler_1 = __webpack_require__(/*! ./network.handler */ 168);
+	var enums_1 = __webpack_require__(/*! ./enums */ 169);
+	var NavigationHandler;
+	(function (NavigationHandler) {
+	    function handle(view, options) {
+	        network_handler_1.default.abortAllXHR();
+	        switch (view) {
+	            case enums_1.default.VIEW_LIST.HOME:
+	                NavigationHandler.Router.navigate("/", { trigger: true });
+	                break;
+	            case enums_1.default.VIEW_LIST.TREES:
+	                if (options != undefined) {
+	                    NavigationHandler.Router.navigate("/trees", { trigger: true });
+	                } else {
+	                    NavigationHandler.Router.navigate("/trees/0", { trigger: true });
+	                }
+	                break;
+	        }
+	    }
+	    NavigationHandler.handle = handle;
+	})(NavigationHandler || (NavigationHandler = {}));
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = NavigationHandler;
+	//# sourceMappingURL=navigation.handler.js.map
+
+/***/ },
+/* 168 */
+/*!***************************************!*\
+  !*** ./src/shared/network.handler.js ***!
+  \***************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var $ = __webpack_require__(/*! jquery */ 161);
+	var NetworkHandler;
+	(function (NetworkHandler) {
+	    var xhrPool;
+	    function pushXHR(xhr) {
+	        xhrPool.push(xhr);
+	    }
+	    NetworkHandler.pushXHR = pushXHR;
+	    function removeXHR(xhr) {
+	        var index = xhrPool.indexOf(xhr);
+	        if (index > -1) {
+	            xhrPool.splice(index, 1);
+	        }
+	    }
+	    NetworkHandler.removeXHR = removeXHR;
+	    function abortAllXHR() {
+	        $.each(xhrPool, function (index, xhr) {
+	            if (xhr != undefined) {
+	                xhr.abort();
+	            }
+	        });
+	        xhrPool = new Array();
+	    }
+	    NetworkHandler.abortAllXHR = abortAllXHR;
+	})(NetworkHandler || (NetworkHandler = {}));
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = NetworkHandler;
+	//# sourceMappingURL=network.handler.js.map
+
+/***/ },
+/* 169 */
+/*!*****************************!*\
+  !*** ./src/shared/enums.js ***!
+  \*****************************/
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	var ENUMS;
+	(function (ENUMS) {
+	    (function (VIEW_LIST) {
+	        VIEW_LIST[VIEW_LIST["NONE"] = 0] = "NONE";
+	        VIEW_LIST[VIEW_LIST["HOME"] = 1] = "HOME";
+	        VIEW_LIST[VIEW_LIST["TREES"] = 2] = "TREES";
+	    })(ENUMS.VIEW_LIST || (ENUMS.VIEW_LIST = {}));
+	    var VIEW_LIST = ENUMS.VIEW_LIST;
+	})(ENUMS || (ENUMS = {}));
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = ENUMS;
+	//# sourceMappingURL=enums.js.map
+
+/***/ },
+/* 170 */
+/*!**************************************!*\
+  !*** ./src/trees/trees.component.js ***!
+  \**************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var React = __webpack_require__(/*! react */ 1);
+	var styles = __webpack_require__(/*! ./trees.component.css */ 171);
+	var Trees;
+	(function (Trees) {
+	    var TreesComponent = function (_React$Component) {
+	        _inherits(TreesComponent, _React$Component);
+	
+	        function TreesComponent(props) {
+	            _classCallCheck(this, TreesComponent);
+	
+	            var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(TreesComponent).call(this, props));
+	
+	            _this.state = {};
+	            return _this;
+	        }
+	
+	        _createClass(TreesComponent, [{
+	            key: 'componentDidMount',
+	            value: function componentDidMount() {
+	                this.setState(this.state);
+	            }
+	        }, {
+	            key: 'render',
+	            value: function render() {
+	                var self = this;
+	                return React.createElement(
+	                    'div',
+	                    { className: styles.wrapper },
+	                    'TREES'
+	                );
+	            }
+	        }]);
+	
+	        return TreesComponent;
+	    }(React.Component);
+	
+	    Trees.TreesComponent = TreesComponent;
+	})(Trees || (Trees = {}));
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = Trees;
+	//# sourceMappingURL=trees.component.js.map
+
+/***/ },
+/* 171 */
+/*!***************************************!*\
+  !*** ./src/trees/trees.component.css ***!
+  \***************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(/*! !./../../~/css-loader!./trees.component.css */ 172);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(/*! ./../../~/style-loader/addStyles.js */ 166)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./trees.component.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./trees.component.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 172 */
+/*!******************************************************!*\
+  !*** ./~/css-loader!./src/trees/trees.component.css ***!
+  \******************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(/*! ./../../~/css-loader/lib/css-base.js */ 165)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "@media all {\r\n  .Lz6Uj_YVVtC6qCMMSee4p {\r\n    width: 100%;\r\n    height: 100%;\r\n  }\r\n}\r\n\r\n\r\n\r\n@media only screen and (orientation: portrait) {\r\n\r\n}\r\n@media only screen and (max-height: 480px) and (orientation: portrait) {\r\n\r\n}\r\n@media only screen and (min-height: 481px) and (max-height: 568px) and (orientation: portrait) {\r\n\r\n}\r\n@media only screen and (min-height: 569px) and (max-height: 627px) and (orientation: portrait) {\r\n\r\n}\r\n@media only screen and (min-height: 628px) and (max-height: 736px) and (orientation: portrait) {\r\n\r\n}\r\n@media only screen and (max-width: 767px) and (orientation: portrait) {\r\n\r\n}\r\n@media only screen and (min-width: 768px) and (orientation: portrait) {\r\n\r\n}\r\n\r\n@media only screen and (orientation: landscape) {\r\n\r\n}\r\n@media only screen and (max-width: 480px) and (orientation: landscape) {\r\n\r\n}\r\n@media only screen and (min-width: 481px) and (max-width: 568px) and (orientation: landscape) {\r\n\r\n}\r\n@media only screen and (min-width: 569px) and (max-width: 667px) and (orientation: landscape) {\r\n\r\n}\r\n@media only screen and (min-width: 668px) and (max-width: 736px) and (orientation: landscape) {\r\n\r\n}\r\n@media only screen and (min-width: 737px) and (max-width: 1280px) and (orientation: landscape) {\r\n\r\n}\r\n@media only screen and (min-width: 1281px) and (max-width: 1920px) and (orientation: landscape) {\r\n\r\n}\r\n", ""]);
+	
+	// exports
+	exports.locals = {
+		"wrapper": "Lz6Uj_YVVtC6qCMMSee4p"
+	};
+
+/***/ },
+/* 173 */
+/*!******************************!*\
+  !*** ./src/locale/locale.js ***!
+  \******************************/
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	var Locale;
+	(function (Locale) {
+	    Locale.sApplicaitonDescription = 'Manage, parent, and care food assets';
+	})(Locale || (Locale = {}));
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = Locale;
+	//# sourceMappingURL=locale.js.map
+
+/***/ },
+/* 174 */
+/*!********************************!*\
+  !*** ./src/shared/settings.js ***!
+  \********************************/
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	var Settings;
+	(function (Settings) {
+	    function bMobile() {
+	        var bMobile = false; //initiate as false
+	        // device detection
+	        if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(navigator.userAgent.substr(0, 4))) {
+	            bMobile = true;
+	        }
+	        return bMobile;
+	    }
+	    Settings.bMobile = bMobile;
+	    Settings.uStaticImage = './static/images/';
+	    Settings.sApplicationLogoImage = 'logo-splash-default.png';
+	})(Settings || (Settings = {}));
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = Settings;
+	//# sourceMappingURL=settings.js.map
+
+/***/ },
+/* 175 */
+/*!**************************************!*\
+  !*** ./src/shared/router.handler.js ***!
+  \**************************************/
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var RouterHandler = function (_Backbone$Router) {
+	    _inherits(RouterHandler, _Backbone$Router);
+	
+	    function RouterHandler(options) {
+	        _classCallCheck(this, RouterHandler);
+	
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(RouterHandler).call(this, options));
+	
+	        _this.route("", "home");
+	        _this.route("trees/:id", "trees");
+	        return _this;
+	    }
+	
+	    _createClass(RouterHandler, [{
+	        key: "home",
+	        value: function home() {
+	            this.current = "home";
+	            //EventHandler.handleNavigate(VIEW_STATUS.HOME);
+	        }
+	    }, {
+	        key: "trees",
+	        value: function trees(id) {
+	            this.current = "trees";
+	            this.arguments = new Array();
+	            this.arguments.push(id);
+	            //EventHandler.handleNavigate(VIEW_STATUS.TREES, { id: id });
+	        }
+	    }]);
+	
+	    return RouterHandler;
+	}(Backbone.Router);
+	
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = RouterHandler;
+	//# sourceMappingURL=router.handler.js.map
+
 /***/ }
 /******/ ]);
-//# sourceMappingURL=out.js.map
+//# sourceMappingURL=foodparent.js.map
